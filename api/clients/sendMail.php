@@ -6,33 +6,38 @@
     use PHPMailer\PHPMailer\SMTP;
     use Dotenv\Dotenv;
     require '../vendor/autoload.php';
-        
-        strlen($_POST['day']) === 1 ? $birth_day = '0'.$_POST['day'] : $birth_day = $_POST['day']  ;
-        strlen($_POST['month']) === 1 ? $birth_month = '0'.$_POST['month'] : $birth_month = $_POST['month']  ;
-        strlen($_POST['year']) === 1 ? $birth_year = '0'.$_POST['year'] : $birth_year = $_POST['year']  ;
-        $birthDate = $birth_year.'-'.$birth_month.'-'.$birth_day;
 
-        $_SESSION['firstname']=$_POST['firstname'];
-        $_SESSION['lastname']=$_POST['lastname'];
-        $_SESSION['email']=$_POST['email'];
-        $_SESSION['password']=$_POST['password'];
-        $_SESSION['gender']=$_POST['choice'];
-        $_SESSION['birthDate']=$birthDate;
+        function generateOtp(){
+            $char = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            $ran='';
+            for($i=0; $i<6; $i++ ){
+                $ran .= $char[random_int(0, strlen($char)-1)];
+            }
+            return $ran;
+        }
+
+        $_SESSION['otp'] = generateOtp();
+        $otp = $_SESSION['otp'];
+        
+        if(isset($_POST['firstname'])){
+            strlen($_POST['day']) === 1 ? $birth_day = '0'.$_POST['day'] : $birth_day = $_POST['day']  ;
+            strlen($_POST['month']) === 1 ? $birth_month = '0'.$_POST['month'] : $birth_month = $_POST['month']  ;
+            strlen($_POST['year']) === 1 ? $birth_year = '0'.$_POST['year'] : $birth_year = $_POST['year']  ;
+            $birthDate = $birth_year.'-'.$birth_month.'-'.$birth_day;
+
+            $_SESSION['user']['firstname']=$_POST['firstname'];
+            $_SESSION['user']['lastname']=$_POST['lastname'];
+            $_SESSION['user']['email']=$_POST['email'];
+            $_SESSION['user']['password']=$_POST['password'];
+            $_SESSION['user']['gender']=$_POST['choice'];
+            $_SESSION['user']['birthDate']=$birthDate;
+        }
+        else{
+            $_SESSION['user']['email'] = $_POST['email'];
+        }
 
     if($_SESSION['token_csrf'] === $_POST['csrf']){   
-        
-        function generateOTP($length = 6) {
-        $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        $otp = '';
-        for ($i = 0; $i < $length; $i++) {
-            $otp .= $chars[random_int(0, strlen($chars) - 1)];  
-        }
-        return $otp;
-        }
-
-        $_SESSION['otp'] = generateOTP() ;
-        $otp = $_SESSION['otp'] ; 
-
+    
         $dotenv = Dotenv::createImmutable(__DIR__);
         $dotenv->load();
 
@@ -71,8 +76,10 @@
         }else{
             echo json_encode(['success'=>true]);
         }
-        // echo json_encode(['success' =>true]);
-        // echo(json_encode(['success'=>$_SESSION]));
+        // echo json_encode(['success' =>false]);
+    //     echo(json_encode(['success'=>$_SESSION]));
+    }else{
+        echo json_encode(['success' =>false]);
     }
 
 ?>
