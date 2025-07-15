@@ -55,7 +55,7 @@ export default class extends AbstractView{
             return yearsOps
           }
           return `
-            <h1 class="font-bold font-semibold text-center text-4xl  text-purple-700">REACHME</h1>
+            <h1 class="font-bold font-semibold py-3 text-center text-4xl  text-purple-700">REACHME</h1>
         <form id='regis' class="min-w-[350px] max-w-[450px] mx-auto py-2 px-4 rounded-md from-purple-500 to-purple-600 via-fuchsia-600 bg-gradient-to-bl" action="" method="POST">
             <h3 class="text-white text-2xl mb-4 text-center">Create an account</h3>
             <hr>
@@ -64,8 +64,8 @@ export default class extends AbstractView{
                     <input name="firstname" id="firstname" placeholder="FirstName" class="bg-white mb-3 rounded-md w-full sm:mb-0 sm:w-6/12 py-2 px-2 outline-0" type="text">
                     <input name="lastname" id="lastname" placeholder="LastName" class="bg-white mb-3 rounded-md w-full sm:mb-0 sm:w-6/12 py-2 px-2 outline-0" type="text">
                 </div>
-                <p id="errName" class='text-red-800 text-[13px] my-0.5'></p>
-                <label class="mt-2 mb-0.5 text-white" for="">Birth Date</label>
+                <p id="errName" class='text-red-800 text-[13px] mt-0.5'></p>
+                <label class="mt-1 mb-0.5 text-white" for="">Birth Date</label>
                 <div class="flex gap-2">
                     <select name="day" id='day' class="ops bg-white w-4/12 rounded-md py-2" name="day" id="day">
                        ${dayOpt()}
@@ -91,33 +91,25 @@ export default class extends AbstractView{
                 </div>
                 <input type='hidden' name='csrf' id='csrf'>
                 <input id="email" name='email' placeholder="email" class=" outline-0 bg-white w-full rounded-md py-2 px-2 my-2" type="text">
-                <p id='mailErr' class="text-[13px] text-red-800 my-0.5"></p>
+                <p id='mailErr' class="text-[13px] text-red-800 mt-[-4px]"></p>
                 <input id="password" name='password' placeholder="password" class=" outline-0 bg-white w-full rounded-md py-2 px-2 my-2" type="password">
-                <p id='passErr' class='text-[13px] text-red-800 my-0.5'></p>
+                <p id='passErr' class='text-[13px] text-red-800 mt-[-4px]'></p>
                 <input id="conf_pass" name='conf_pass' placeholder="Confirm password" class=" outline-0 bg-white w-full rounded-md py-2 px-2 my-2" type="password">
-                <p id='confErr' class='text-[13px] text-red-800 my-0.5'></p>
+                <p id='confErr' class='text-[13px] text-red-800 mt-[-4px] mb-2'></p>
                 <input type="submit" value="SignUp" class=" cursor-pointer w-5/12 bg-purple-800 block mx-auto hover:bg-purple-900 transition ease-in-out duration-200 font-bold text-white text-center rounded-md py-2 mb-2 ">
-                <a href="/" class="text-blue-950  transition duration-200 ease-in-out hover:text-white flex justify-center">Already have an account ?</a>
+                <a href="/" class="text-blue-950  transition duration-200 ease-in-out hover:text-white flex justify-center" page-link>Already have an account ?</a>
             </div>
         </form>
         `
       }
 
       async scriptLink(){
+        document.getElementById('intro').innerHTML = await this.getContent();
           const regForm = document.getElementById('regis')
-          // const birth_day = document.getElementById('day');
-          // const birth_month = document.getElementById('month');
-          // const birth_year = document.getElementById('year');
-          // const choice = document.querySelector("input[name='choice']:checked");
+
            const token = document.getElementById('csrf');
-          //  fetch("http://localhost:8000/api/session.php")
-          //  .then(response => response.json())
-          //  .then(response => {
-          //   await token.value=response;
-          //   console.log(token.value)
-          // })
-          //  .catch(error => console.log(error));
-          const response = await fetch("http://localhost:8000/api/session.php",{
+        // Génération du token csrf
+          const response = await fetch("http://localhost:8080/api/session.php",{
             credentials : "include"
           });
           const data = await response.json();
@@ -206,20 +198,20 @@ export default class extends AbstractView{
 
             
             if(IsRegistrationValid()){
-              const Formdata = new FormData(regForm);
-              const mailer = await fetch('http://localhost:8000/api/clients/sendMail.php',{
-              method : 'POST',
-              body : Formdata,
-              credentials : 'include'
-              });
-              const answer= await mailer.json();
-              console.log(answer.success);
-              if(answer.success){
-                navigateTo('/otpValidation');
-              }
-              else{
-                console.log('tellement tu es dans dôhi');
-              }
+                const formdata = new FormData(regForm);
+                const mailer = await fetch('http://localhost:8080/api/clients/sendMail.php',{
+                method : 'POST',
+                body : formdata,
+                credentials : 'include'
+                });
+                const answer= await mailer.json();
+                console.log(answer.success);
+                if(answer.success){
+                  navigateTo('/otpValidation');
+                }
+                else{
+                  console.log(false);
+                }
               }
             
 

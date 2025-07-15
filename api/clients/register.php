@@ -1,36 +1,55 @@
 <?php 
 
-    require '../allowedOrigin.php'; 
-    require '../class/users.php';
-    session_start();
-    // var_dump($_SESSION);
-    // echo '<br>'.$csrf_token = $_POST['csrf'] ;
+require '../allowedOrigin.php'; 
+require '../class/users.php';
+session_start();
 
+header('Content-Type: application/json');
 
+if (isset($_POST['Otp'], $_SESSION['otp'])) {
 
-    // // if( $_POST['csrf'] === $_SESSION['token_csrf']){
-        $firstname = $_POST['firstname'] ;
-        $lastname = $_POST['lastname'] ;
-        $email = $_POST['email'] ;
-        $password = $_POST['password'] ;
-        $conf_pass = $_POST['conf_pass'] ;
-        $gender = $_POST['choice'] ;
-        $birth_day = $_POST['day'] ;
-        $birth_month = $_POST['month'] ;
-        $birth_year = $_POST['year'] ;
-        $csrf_token = $_POST['csrf'] ;
-        $birthDate = $birth_year.'-'.$birth_month.'-'.$birth_day;
-    //     User::create($firstname,$lastname,$email,$password,$gender,$birthDate,'User');
-    //     echo 'user created sucessfully!';
-    // }else{
-    //     echo 'Dôhi';
-    // }
+    if ($_SESSION['otp'] === $_POST['Otp']) {
 
-    if( $_POST['csrf'] === $_SESSION['token_csrf']){
-        echo true;
+        if (isset($_SESSION['user']['firstname'])){
+            User::create(
+                $_SESSION['user']['firstname'],
+                $_SESSION['user']['lastname'],
+                $_SESSION['user']['email'],
+                $_SESSION['user']['password'],
+                $_SESSION['user']['gender'],
+                $_SESSION['user']['birthDate'],
+                "User"
+            );
+
+            $user = new User();
+            $user = $user->getMail($_SESSION['user']['email']);
+            $_SESSION['user']['id'] = $user['id'];
+
+            unset(
+                $_SESSION['user']['firstname'],
+                $_SESSION['user']['lastname'],
+                $_SESSION['user']['email'],
+                $_SESSION['user']['password'],
+                $_SESSION['user']['gender'],
+                $_SESSION['user']['birthDate'],
+                $_SESSION['token_csrf'],
+                $_SESSION['otp']
+            );
+        }else{
+            $users = new User();
+            $user = $users->getMail($_SESSION['user']['email']);
+            $_SESSION['user']['id'] = $user['id'];
+            unset($_SESSION['user']['email'],$_SESSION['token_csrf'],$_SESSION['otp']);
+        }
+
+        echo json_encode(["success" => 1]);
+
+    } else {
+        echo json_encode(["success" => 2]); // OTP incorrect
     }
-    else{
-        echo false;
-    }
+
+} else {
+    echo json_encode(["success" => 0]); // OTP non envoyé ou session expirée
+}
 
 ?>

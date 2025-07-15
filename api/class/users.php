@@ -75,14 +75,14 @@
             if(!$this->isMailUnique($email)){
                 $user = $this->getMail($email);
                 if(password_verify($password,$user['password_hash'])){
-                      return 1;
+                      return true;
                 }
                 else{
-                    return 0;
+                    return false;
                 }
             }
             else{
-                return 0;
+                return false;
             }
          }
 
