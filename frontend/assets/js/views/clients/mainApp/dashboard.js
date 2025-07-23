@@ -58,7 +58,7 @@ export default class extends AbstractView{
             <aside id="sideBar" class="fixed h-screen bg-black/40 w-3/12">
             <ul class="p-2 flex flex-col gap-5">
                 <li class="flex hover:bg-white/20 transition duration-200 ease-in-out p-2 rounded-md">
-                    <a href="/profil" page-link class="flex items-center gap-5 w-full">  
+                    <a href="/profile" page-link class="flex items-center gap-5 w-full">  
                          <img class="pdp w-10 h-10 bg-white/50 hover:bg-white/70 transition ease-in-out duration-200 cursor-pointer p-2 rounded-full" src="" alt="">
                          <p class="userName text-white text-sm"></p>
                     </a>
