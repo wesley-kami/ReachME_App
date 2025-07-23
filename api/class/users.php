@@ -86,7 +86,7 @@
             }
          }
 
-         public function updateInfo($firstname,$lastname,$gender,$birth_date,$id){
+        public function updateInfo($firstname,$lastname,$gender,$birth_date,$id){
             $sql = 'UPDATE users set first_name=:firstname, last_name=:lastname, gender=:gender, birthDate=:birth WHERE id=:id';
             $req=$this->db->prepare($sql);
             $req->execute([
@@ -96,12 +96,17 @@
                 'birth'=> $birth_date,
                 "id" => $id          
             ]);
-         }
+        }
 
          public function updateProfil($id,$profile_image){
             if($this->isFileValide($profile_image)){
-                $filedir ='uploads/'.uniqid('user_',true).'.'.pathinfo($profile_image['name'],PATHINFO_EXTENSION);
-                if(move_uploaded_file($profile_image['tmp_name'],$filedir)){
+                $filedir ='uploads/profiles/'.uniqid('user_',true).'.'.pathinfo($profile_image['name'],PATHINFO_EXTENSION);
+                if(move_uploaded_file($profile_image['tmp_name'],"../../frontend/assets/images/".$filedir)){
+                $user = User::find($id);
+                $previousImage =$user["profile_image"];
+                if($previousImage != NULL){
+                    unlink("../../frontend/assets/images/".$previousImage);
+                } 
                 $db = new Database(); 
                 $conn =$db->getconnection();
                 $sql = 'UPDATE users set profile_image=:profile WHERE id=:id';

@@ -1,7 +1,6 @@
 <?php 
     require '../class/database.php';
     require '../class/Utilitaires.php';
-    session_start();
 
     class Post extends Database{
         use Utilitaires ;
@@ -74,7 +73,7 @@
         public static function all(){
             $db= new Database();
             $log = $db->getconnection();
-            $sql = "SELECT * FROM posts" ;
+            $sql = " SELECT first_name,last_name,content,user_id,image,posts.created_at FROM posts,users WHERE users.id = posts.user_id ORDER BY created_at DESC ";
             $req=$log->prepare($sql);
             $req->execute();
             return $req->fetchAll();

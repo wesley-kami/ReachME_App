@@ -7,7 +7,7 @@ export default class extends AbstractView{
         this.setTitle("OTP")
     }
 
-    async getContent(){
+     getContent(){
         return `
   <h1 class="font-bold text-center mb-2 text-4xl py-10 text-purple-700">REACHME</h1>
         <form id='valid' name='valid' class=" min-w-[350px] max-w-[450px] mx-auto p-6 rounded-md from-purple-500 to-purple-600 via-fuchsia-600 bg-gradient-to-bl" action="" method="POST">

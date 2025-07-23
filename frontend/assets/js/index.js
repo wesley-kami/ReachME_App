@@ -5,6 +5,7 @@ import otpValidate from "./views/clients/logs/otpValidate.js"
 import otp from "./views/clients/logs/otp.js"
 // import dashboard from "./views/clients/mainApp/dashboard.js"
 import home from "./views/clients/mainApp/home/home.js"
+import profile from "./views/clients/mainApp/profile/profile.js"
 
  export default function navigateTo(url){
      history.pushState(null,null,url);
@@ -13,10 +14,11 @@ import home from "./views/clients/mainApp/home/home.js"
 
 export const router = async () =>{
     const routes = [
-        { path:'/home', view : home},
         { path:'/', view : login },
+        { path:'/home', view : home},
+        { path:'/profile', view : profile},
         { path:'/otp', view : otp},
-        {path: '/otpValidation',view: otpValidate},
+        { path: '/otpValidation',view: otpValidate},
         { path:'/register', view : register},
         { path:'/404', view : lostPage },
     ]

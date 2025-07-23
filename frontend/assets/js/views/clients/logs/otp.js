@@ -7,7 +7,7 @@ export default class extends AbstractView{
         this.setTitle("OTP")
     }
 
-    async getContent(){
+     getContent(){
         return `
            <div class="bg-gradient-to-br p-5 from-slate-900 to-purple-800 via-violet-900 h-screen">
                 <h1 class="font-bold text-center mb-4  text-4xl text-purple-700">REACHME</h1>

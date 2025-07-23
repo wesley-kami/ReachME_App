@@ -8,7 +8,7 @@ export default class extends AbstractView{
          this.setTitle("register")
       }
 
-      async getContent(){
+       getContent(){
         // import navigateTo from "../../../index.js";
         // import { router } from "../../../index.js";
         
@@ -67,26 +67,26 @@ export default class extends AbstractView{
                 <p id="errName" class='text-red-800 text-[13px] mt-0.5'></p>
                 <label class="mt-1 mb-0.5 text-white" for="">Birth Date</label>
                 <div class="flex gap-2">
-                    <select name="day" id='day' class="ops bg-white w-4/12 rounded-md py-2" name="day" id="day">
+                    <select name="day" id='day' class="ops bg-white w-4/12 rounded-md py-1" name="day" id="day">
                        ${dayOpt()}
                     </select>
-                    <select name="month" id='month' class="bg-white w-4/12 rounded-md py-2" name="month" id="month">
+                    <select name="month" id='month' class="bg-white w-4/12 rounded-md py-1" name="month" id="month">
                         ${monthOpt()}
                     </select>
-                    <select name="year" id='year' class="bg-white w-4/12 rounded-md py-2" name="year" id="year">
+                    <select name="year" id='year' class="bg-white w-4/12 rounded-md py-1" name="year" id="year">
                         ${years()}
                     </select>
                 </div>
                 <label class="mt-2 mb-0.5 text-white" for="">Gender</label>
                 <div class="flex gap-2">
                   <div class="bg-white flex gap-6 justify-center w-4/12 rounded-md py-2 ">
-                    Male <input type="radio" name='choice' value='male' checked> 
+                    Male <input type="radio" name='choice' value='Male' checked> 
                   </div>
                   <div class="bg-white flex gap-6 justify-center w-4/12 rounded-md py-2 ">
-                    Female <input type="radio" name='choice' value='female'> 
+                    Female <input type="radio" name='choice' value='Female'> 
                   </div>
                   <div class="bg-white flex gap-6 justify-center w-4/12 rounded-md py-2 ">
-                    other <input type="radio" name='choice' value='other'> 
+                    other <input type="radio" name='choice' value='Other'> 
                   </div>
                 </div>
                 <input type='hidden' name='csrf' id='csrf'>

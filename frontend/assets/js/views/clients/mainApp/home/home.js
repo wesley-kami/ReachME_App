@@ -1,5 +1,6 @@
 import AbstractView from "../../AbstractView.js";
 import dashboard from "../dashboard.js";
+import navigateTo from "../../../../index.js";
 
 export default class extends AbstractView{
     constructor(){
@@ -7,9 +8,9 @@ export default class extends AbstractView{
         this.setTitle('home');
     }
 
-    async getContent(){
+     getContent(){
         return `
-            <div>
+            <div id='postNester'>
                 <div class="mx-auto rounded-md bg-black/40 p-3 w-7/12">
                     <div class="flex gap-5 mx-auto gap ">
                         <a class="" href=""><img class="pdp w-11 h-11 bg-white p-1 rounded-full" src="" alt=""></a>
@@ -18,7 +19,7 @@ export default class extends AbstractView{
                     <hr class="my-4">
                     <label for='postImage' id='post' class='flex items-center bg-black/50 hover:bg-black/60 cursor-pointer transition duration-200 ease-in-out p-1 rounded-md justify-center gap-5'>
                             <svg width="36px" height="36px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="purple"><path d="M21 7.6V20.4C21 20.7314 20.7314 21 20.4 21H7.6C7.26863 21 7 20.7314 7 20.4V7.6C7 7.26863 7.26863 7 7.6 7H20.4C20.7314 7 21 7.26863 21 7.6Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M18 4H4.6C4.26863 4 4 4.26863 4 4.6V18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M7 16.8L12.4444 15L21 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16.5 13C15.6716 13 15 12.3284 15 11.5C15 10.6716 15.6716 10 16.5 10C17.3284 10 18 10.6716 18 11.5C18 12.3284 17.3284 13 16.5 13Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                            <p class='text-white'> Photo/videos </p>
+                            <p class='text-white'> Photo </p>
                     </label>
                 </div>
                 <form method='POST' enctype='multipart/form-data' id="postPop" class='mx-auto hidden fixed top-[10%] right-[20%] backdrop-blur my-2 w-[580px] bg-black/40 rounded-md h-fit'>
@@ -66,6 +67,8 @@ export default class extends AbstractView{
 
         /* Loading dashboard script */
         await dash.scriptLink();
+
+        const overlay = document.getElementById('overlay');
 
         const nav = document.querySelectorAll('.nav');
 
@@ -126,7 +129,9 @@ export default class extends AbstractView{
             post.addEventListener('click',async () =>{
                 postPop.classList.remove('hidden');
                 intro.backgroundColor= 'black';
-            // console.log('I am the post here');
+                overlay.classList.remove('hidden');
+                overlay.appendChild(postPop);
+                
             });
             postImage.addEventListener('change', ()=>{
                 const file = postImage.files[0];
@@ -150,13 +155,18 @@ export default class extends AbstractView{
             });
             publication.addEventListener('click', ()=>{
             postPop.classList.remove('hidden');
+            overlay.classList.remove('hidden');
+            overlay.appendChild(postPop);
+            // postPop.classList.add('z-100');
+            // overlay.classList.add('z-[1]');
             // intro.style.backgroundColor ='blue';
             // console.log(intro.style.backgroundColor);
             // intro.classList.add("blur-sm", "pointer-events-none", "select-none")
             });
 
             closePost.addEventListener('click',()=>{
-                postPop.classList.add('hidden')
+                postPop.classList.add('hidden');
+                overlay.classList.add('hidden');
             });
 
             postPop.addEventListener('submit', async (e)=>{
@@ -167,15 +177,50 @@ export default class extends AbstractView{
                     method : 'POST',
                     body : data
                 });
-
-                const postRes = await sendPost.json();
-
-                if(sendPost.success){
+                const sendpostRes = await sendPost.json();
+                
+                if(sendpostRes.success){
                     postPop.classList.add('hidden');
+                    overlay.classList.add('hidden');
+                    navigateTo('/home');
+                }else{
+
                 }
                 console.log(postRes);
             });
             // console.log(userInfo.data)
+
+            const posts = await fetch('http://localhost:8080/api/clients/getPost.php',{ credentials : 'include' })
+            const postRes = await posts.json();
+
+            console.log(postRes);
+            const postNester = document.getElementById('postNester');
+
+            postRes.data.forEach(post => {
+                // Example: If you have user info in post.user (adjust as needed)
+                const view = document.createElement('div');
+                view.className = "mx-auto rounded-md bg-black/40 p-4 my-4 w-7/12 shadow-lg";
+
+                view.innerHTML = `
+    <div class="flex gap-4 items-center mb-2">
+        <img class="w-12 h-12 rounded-full bg-white p-1" src="${post.profile_image || './assets/images/public/avatar.png'}" alt="profile">
+        <div>
+            <p class="text-white font-semibold text-lg">${post.first_name || 'Unknown'} ${post.last_name || ''}</p>
+            <p class="text-xs text-purple-300">${new Date(post.created_at).toLocaleString()}</p>
+        </div>
+    </div>
+    <div class="text-white mb-3 text-base">${post.content || ''}</div>
+    ${post.image ? `
+        <div class="w-full rounded-md overflow-hidden bg-black/30 mb-2">
+            <img src="assets/images/${post.image}" alt="post image" class="w-full max-h-96 object-contain mx-auto rounded-md" />
+        </div>
+    ` : ''}
+`;
+
+                postNester.appendChild(view);
+            });
+            
+
         }else{
             navigateTo('/');
         }

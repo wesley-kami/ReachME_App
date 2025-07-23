@@ -5,7 +5,7 @@ use GrahamCampbell\ResultType\Error;
     ini_set('display_startup_errors', 1);   // Show startup errors
     error_reporting(E_ALL);                 // Report all types of errors
 
-
+    session_start();
     require '../allowedOrigin.php';
     require '../class/posts.php';
 
