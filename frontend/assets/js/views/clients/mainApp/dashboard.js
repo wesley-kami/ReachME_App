@@ -1,4 +1,4 @@
-// import navigateTo from "../../../index.js";
+import navigateTo from "../../../index.js";
 import AbstractView from "../AbstractView.js";
 // import home from "./home/home.js";
 
@@ -9,7 +9,9 @@ export default class extends AbstractView{
     }
 
     async getContent(){
-        return `<header class="flex fixed w-full justify-between bg-black/20 px-2">
+        return `
+            <div id='overlay' class='hidden bg-white-200/20 backdrop-blur absolute h-screen w-full z-20 '></div>
+                <header class="flex fixed w-full justify-between bg-black/20 px-2">
            <div class="flex w-[300px] justify-around items-center">
              <div class="w-7 h-7 rounded bg-purple-400 flex text-white items-center justify-center font-bold text-sm">R</div>
              <div class="bg-white/30 px-2 h-8 flex rounded-full justify-center items-center w-150">
@@ -21,7 +23,7 @@ export default class extends AbstractView{
            </div>
 
            <div class="flex justify-around w-4/12">
-                <a href="" class='nav hover:bg-white/10 transition ease-in-out duration-200 m-1 rounded-md w-[100px] text-center p-2 h-fit no-underline'>
+                <a href="/home" page-link class='nav hover:bg-white/10 transition ease-in-out duration-200 m-1 rounded-md w-[100px] text-center p-2 h-fit no-underline'>
                     <svg class="mx-auto w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="size-6">
                         <path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />
                         <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
@@ -48,7 +50,6 @@ export default class extends AbstractView{
                     <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="size-6">
                       <path fillRule="evenodd" d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z" clipRule="evenodd" />
                     </svg>
-
                 </a>
             <img class="pdp w-10 h-10 bg-white/50 hover:bg-white/70 transition ease-in-out duration-200 cursor-pointer p-2 rounded-full" src="" alt="">
            </div>
@@ -57,7 +58,7 @@ export default class extends AbstractView{
             <aside id="sideBar" class="fixed h-screen bg-black/40 w-3/12">
             <ul class="p-2 flex flex-col gap-5">
                 <li class="flex hover:bg-white/20 transition duration-200 ease-in-out p-2 rounded-md">
-                    <a href="" class="flex items-center gap-5 w-full">  
+                    <a href="/profil" page-link class="flex items-center gap-5 w-full">  
                          <img class="pdp w-10 h-10 bg-white/50 hover:bg-white/70 transition ease-in-out duration-200 cursor-pointer p-2 rounded-full" src="" alt="">
                          <p class="userName text-white text-sm"></p>
                     </a>
@@ -89,13 +90,16 @@ export default class extends AbstractView{
         <main id="main" class="p-5 w-9/12 h-screen fixed right-0 overflow-y-scroll">
             
         </main>
-        </div>`
+        </div>
+        `
     }
 
     async scriptLink(){
         /* Represent the div that ill contain all the page (The SPA representative itself) */
         const intro = document.getElementById('intro').innerHTML = await this.getContent();
-        // const main = document.getElementById('main');
+        const main = document.getElementById('main');
+
+        const header = document.querySelector('header');
         // console.log(main)
         // main.innerHTML = hom.getContent();
         // await hom.scriptLink();

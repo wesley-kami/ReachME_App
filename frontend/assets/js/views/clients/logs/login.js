@@ -6,7 +6,7 @@ export default class extends AbstractView{
         this.setTitle("login");
     }
 
-    async getContent(){
+     getContent(){
         return `
              <h1 class="font-bold text-center py-10 text-4xl text-purple-700">REACHME</h1>
         <form id='logForm' name='logForm' class="min-w-[350px] max-w-[450px] mx-auto p-4 rounded-md from-purple-500 to-purple-600 via-fuchsia-600 bg-gradient-to-bl" action="" method="POST">
@@ -14,13 +14,13 @@ export default class extends AbstractView{
             <hr>
             <div class="flex-col flex relative">
                 <p id='errLog' class="text-[13px] text-red-800 my-0.5"></p>
-                <input name="email" id="email" placeholder="email address" class="bg-white outline-0 w-full rounded-md py-2 px-2 my-3" type="text">
+                <input name="email" id="email" placeholder="Email address" class="bg-white outline-0 w-full rounded-md py-2 px-2 my-3" type="text">
                 <p id='errMail' class="text-[13px] text-red-800 mt-[-8px]"></p>
                 <input type='hidden' name='csrf' id='csrf'>
-                <input name="password" id="password" placeholder="password" class="bg-white text-lg outline-0 w-full rounded-md py-2 px-2 my-3" type="password">
+                <input name="password" id="password" placeholder="Password" class="bg-white text-lg outline-0 w-full rounded-md py-2 px-2 my-3" type="password">
                 <p id='errPass' class="text-[13px] text-red-800 mt-[-8px] mb-2"></p>
-                <input type="submit" value="SignIn" class=" w-full bg-purple-800 cursor-pointer block mx-auto shadow-black hover:shadow-md hover:bg-purple-900 transition ease-in-out duration-200 font-bold text-white text-center rounded-md py-2 mb-2 ">
-                <p><a href="/register" page-link class="text-blue-950  transition duraion-200 ease-in-out hover:text-white">Do not have an account ?</a> or maybe <a href='/otp' page-link class="text-blue-950  transition duraion-200 ease-in-out hover:text-white">Forgotten password</a></p>
+                <input type="submit" value="Sign In" class=" w-full bg-purple-800 cursor-pointer block mx-auto shadow-black hover:shadow-md hover:bg-purple-900 transition ease-in-out duration-200 font-bold text-white text-center rounded-md py-2 mb-2 ">
+                <p><a href="/register" page-link class="text-blue-950  transition duraion-200 ease-in-out hover:text-white">Do not have an account ?</a> Or maybe <a href='/otp' page-link class="text-blue-950  transition duraion-200 ease-in-out hover:text-white">Forgotten password ?</a></p>
             </div>
             
         </form> 
@@ -32,7 +32,9 @@ export default class extends AbstractView{
         const logForm = document.getElementById('logForm');
         const token = document.getElementById('csrf');
         /* Destruction de la session à revoir dans le bouton deconnexion */
-        const killSession = await fetch('http://localhost:8080/api/killSession.php');
+        const killSession = await fetch('http://localhost:8080/api/killSession.php',{
+            credentials : 'include'
+        });
             const killResponse = await killSession.json();
             console.log(killResponse)
             const csrf = await fetch('http://localhost:8080/api/session.php',{

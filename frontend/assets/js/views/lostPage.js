@@ -6,7 +6,7 @@ export default class extends AbstractView{
         this.setTitle("Not Found");
     }
 
-    async getContent(){
+    getContent(){
         return ` 
         <div class="text-center flex flex-col items-center justify-center h-screen">
             <h1 class="text-7xl font-bold text-purple-500 mb-4">404</h1>
